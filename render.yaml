@@ -1,1 +1,7 @@
-
+services:
+  - type: web
+    name: solar-analyzer
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+  
