@@ -1,1 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Solar ROI & NPV Analyzer</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f2f2f2;
+    padding:15px;
+}
+
+.box{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 2px 10px #ccc;
+}
+
+h2{
+    text-align:center;
+}
+
+input,button{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    box-sizing:border-box;
+}
+
+button{
+    background:#008000;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.section{
+    margin-top:20px;
+    padding:10px;
+    background:#eeeeee;
+    border-radius:8px;
+}
+
+.result{
+    margin-top:20px;
+    background:#e8ffe8;
+    padding:15px;
+    border-radius:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+td,th{
+    border:1px solid #aaa;
+    padding:6px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>☀️ Solar ROI & NPV Analyzer</h2>
+
+
+<form method="post">
+
+
+<div class="section">
+<h3>Solar System</h3>
+
+PV Size kW:
+<input name="pv_kw" value="100">
+
+Peak Sun Hour:
+<input name="psh" value="4.5">
+
+Performance Ratio %:
+<input name="pr" value="80">
+
+Yearly Degradation %:
+<input name="degradation" value="0.5">
+
+</div>
+
+
+
+<div class="section">
+
+<h3>Generator</h3>
+
+Fuel Consumption L/hour:
+<input name="fuel" value="25">
+
+Running Hours/day:
+<input name="hours" value="10">
+
+Diesel Price $/L:
+<input name="diesel" value="1.2">
+
+Solar Offset %:
+<input name="offset" value="50">
+
+</div>
+
+
+
+<div class="section">
+
+<h3>EPC Cost & Finance</h3>
+
+CAPEX / EPC Cost $:
+<input name="capex" value="80000">
+
+O&M % / Year:
+<input name="om" value="1">
+
+Project Lifetime (Year):
+<input name="lifetime" value="10">
+
+Discount Rate %:
+<input name="discount" value="8">
+
+</div>
+
+
+
+<button type="submit">
+Calculate
+</button>
+
+
+</form>
+
+
+
+{% if result %}
+
+<div class="result">
+
+<h3>Result</h3>
+
+Solar Generation:
+{{result.solar}} kWh/year
+<br><br>
+
+Fuel Saving:
+{{result.fuel}} L/year
+<br><br>
+
+Money Saving:
+${{result.saving}} / year
+
+<hr>
+
+Payback:
+{{result.finance.payback}} Year
+
+<br>
+
+ROI:
+{{result.finance.roi}} %
+
+<br>
+
+NPV:
+${{result.finance.npv}}
+
+<hr>
+
+<h3>Cash Flow</h3>
+
+<table>
+
+<tr>
+<th>Year</th>
+<th>Cash</th>
+<th>Cumulative</th>
+</tr>
+
+{% for c in result.finance.cashflow %}
+
+<tr>
+<td>{{c.year}}</td>
+<td>${{c.cash}}</td>
+<td>${{c.total}}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+
+</div>
+
+{% endif %}
+
+
+</div>
+
+</body>
+</html>
